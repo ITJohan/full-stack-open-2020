@@ -12,19 +12,30 @@ const anecdotes = [
 
 const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
-  const generateRandomNum = () => {
+  const generateIndex = () => {
     return Math.floor(Math.random() * anecdotes.length)
+  }
+
+  const setVote = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
   }
 
   return (
     <div>
       <div>{anecdotes[selected]}</div>
-      <button onClick={() => setSelected(generateRandomNum())}>
-        Next anecdote
-      </button>
+      <div>Has {votes[selected]} votes.</div>
+      <Button handleClick={() => setVote()} text='Vote' />
+      <Button handleClick={() => setSelected(generateIndex())} text='Next anecdote' />
     </div>
   )
 }
+
+const Button = ({handleClick, text}) => (
+  <button onClick={handleClick}>{text}</button>
+)
 
 ReactDOM.render(<App anecdotes={anecdotes} />, document.getElementById('root'))
