@@ -13,6 +13,7 @@ const anecdotes = [
 const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const topIndex = votes.reduce((maxIndex, elem, index, arr) => elem > arr[maxIndex] ? index : maxIndex, 0)
 
   const generateIndex = () => {
     return Math.floor(Math.random() * anecdotes.length)
@@ -26,10 +27,10 @@ const App = ({anecdotes}) => {
 
   return (
     <div>
-      <div>{anecdotes[selected]}</div>
-      <div>Has {votes[selected]} votes.</div>
+      <Section anecdotes={anecdotes} header='Anecdote of the day' index={selected} votes={votes} />
       <Button handleClick={() => setVote()} text='Vote' />
       <Button handleClick={() => setSelected(generateIndex())} text='Next anecdote' />
+      <Section anecdotes={anecdotes} header='Anecdote with most votes' index={topIndex} votes={votes} />
     </div>
   )
 }
@@ -37,5 +38,15 @@ const App = ({anecdotes}) => {
 const Button = ({handleClick, text}) => (
   <button onClick={handleClick}>{text}</button>
 )
+
+const Section = ({anecdotes, header, index, votes}) => {
+  return (
+    <>
+      <h1>{header}</h1>
+      <div>{anecdotes[index]}</div>
+      <div>Has {votes[index]} votes.</div>
+    </>
+  )
+}
 
 ReactDOM.render(<App anecdotes={anecdotes} />, document.getElementById('root'))
