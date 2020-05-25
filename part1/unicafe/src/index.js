@@ -27,17 +27,26 @@ const Statistic = ({ number, text }) => (
 )
 
 const Statistics = ({ good, neutral, bad }) => {
-  return (
-    <>
-      <h1>Statistics</h1>
-      <Statistic number={ good } text='Good' />
-      <Statistic number={ neutral } text='Neutral' />
-      <Statistic number={ bad } text='Bad' />
-      <Statistic number={ good + neutral + bad } text='All' />
-      <Statistic number={ (good + bad * -1) / 3 } text='Average' />
-      <Statistic number={ `${good / (good + neutral + bad)} %` } text='Positive' />
-    </> 
-  )
+  if (good + neutral + bad > 0) {
+    return (
+      <>
+        <h1>Statistics</h1>
+        <Statistic number={ good } text='Good' />
+        <Statistic number={ neutral } text='Neutral' />
+        <Statistic number={ bad } text='Bad' />
+        <Statistic number={ good + neutral + bad } text='All' />
+        <Statistic number={ (good + bad * -1) / 3 } text='Average' />
+        <Statistic number={ `${good / (good + neutral + bad)} %` } text='Positive' />
+      </> 
+    )
+  } else {
+    return (
+      <>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </>
+    )
+  }
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
