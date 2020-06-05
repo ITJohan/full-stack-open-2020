@@ -19,6 +19,15 @@ const App = () => {
       })
   }, [])
 
+  const handleDelete = id => {
+    personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+        setFilter('')
+      })
+  }
+
   const handleFilterChange = e => {
     const filter = e.target.value
 
@@ -71,8 +80,8 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {filter === '' ?
-       <Numbers persons={persons} /> :
-       <Numbers persons={filteredPersons} />
+       <Numbers persons={persons} handleDelete={handleDelete} /> :
+       <Numbers persons={filteredPersons} handleDelete={handleDelete} />
       }
     </div>
   )
