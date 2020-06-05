@@ -19,13 +19,17 @@ const App = () => {
       })
   }, [])
 
-  const handleDelete = id => {
-    personService
-      .remove(id)
-      .then(() => {
-        setPersons(persons.filter(person => person.id !== id))
-        setFilter('')
-      })
+  const handleDelete = oldPerson => {
+    const confirmed = window.confirm(`Delete ${oldPerson.name}?`)
+
+    if (confirmed) {
+      personService
+        .remove(oldPerson.id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== oldPerson.id))
+          setFilter('')
+        })
+    }
   }
 
   const handleFilterChange = e => {
