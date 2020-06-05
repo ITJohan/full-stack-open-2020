@@ -51,23 +51,43 @@ const App = () => {
     e.preventDefault()
 
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
+      // Is the person already added
+      const shouldReplace = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
 
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-    }
+      if (shouldReplace) {
+        // Update old
+        const person = persons.find(person => person.name === newName)
+        const updatedPerson = { ...person, number: newNumber }
 
-    personService
-      .create(newPerson)
-      .then(returnedPerson => {
-        setPersons([ ...persons, returnedPerson ])
-        setFilter('')
-        setNewName('')
-        setNewNumber('')
-      })
+        personService
+          .update(person.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
+            resetInputs()
+          })
+      } else {
+        return
+      }
+    } else {
+      // If not, add new
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      }
+
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons([ ...persons, returnedPerson ])
+          resetInputs()
+        })
+    }
+  }
+
+  const resetInputs = () => {
+    setFilter('')
+    setNewName('')
+    setNewNumber('')
   }
 
   return (
