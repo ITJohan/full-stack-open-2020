@@ -47,10 +47,14 @@ const App = () => {
       number: newNumber,
     }
 
-    setPersons([...persons, newPerson])
-    setFilter('')
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons([ ...persons, response.data ])
+        setFilter('')
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   return (
