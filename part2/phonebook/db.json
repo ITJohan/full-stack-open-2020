@@ -6,11 +6,6 @@
       "id": 6
     },
     {
-      "name": "Jens Petterson",
-      "number": "734-1235234",
-      "id": 7
-    },
-    {
       "name": "Jonas Andersson",
       "number": "532-13523546",
       "id": 9
@@ -19,11 +14,6 @@
       "name": "Henrik Bodin",
       "number": "222-222222",
       "id": 10
-    },
-    {
-      "name": "Tomas Kirkeby",
-      "number": "251-1236134",
-      "id": 11
     }
   ]
 }
