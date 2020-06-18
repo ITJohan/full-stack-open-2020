@@ -73,7 +73,7 @@ const App = () => {
           })
           .catch(error => {
             setNotificationColor('red')
-            setNotification(`Information of ${newName} has already been removed from server`)
+            setNotification(error.response.data.error)
             setTimeout(() => setNotification(null), 3000)
           })
       } else {
@@ -93,6 +93,11 @@ const App = () => {
           resetInputs()
           setNotificationColor('green')
           setNotification(`Added ${newName}`)
+          setTimeout(() => setNotification(null), 3000)
+        })
+        .catch(error => {
+          setNotificationColor('red')
+          setNotification(error.response.data.error)
           setTimeout(() => setNotification(null), 3000)
         })
     }
