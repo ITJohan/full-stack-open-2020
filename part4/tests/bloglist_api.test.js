@@ -53,11 +53,22 @@ test('missing likes property defaults to zero', async () => {
     url: 'http://www.blogportal.com'
   }
 
-  await api.post('/api/blogs')
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
 
   const blogsAtEnd = await helper.blogsInDb()
   const likes = blogsAtEnd.map(blog => blog.likes)
   expect(likes[helper.initialBlogs.length]).toBe(0)
+})
+
+test('missing title and url returns 400 bad request', async () => {
+  const newBlog = {}
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 afterAll(() => {
