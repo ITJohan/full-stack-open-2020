@@ -44,3 +44,23 @@ describe('favorite blog', () => {
     expect(listHelper.favoriteBlog(listWithManyBlogs)).toEqual(listWithManyBlogs[2])
   })
 })
+
+describe('most blogs', () => {
+  test('of empty list is undefined', () => {
+    expect(listHelper.mostBlogs(listWithNoBlogs)).toEqual(undefined)
+  })
+
+  test('of list with one blog equals the one blog author', () => {
+    expect(listHelper.mostBlogs(listWithOneBlog)).toEqual({
+      name: 'Edsger W. Dijkstra',
+      blogs: 1
+    })
+  })
+
+  test('of list with many blogs is the author with most blogs', () => {
+    expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual({
+      name: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+})
