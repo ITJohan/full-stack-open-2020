@@ -46,6 +46,20 @@ test('a valid blog can be added', async () => {
   expect(titles).toContain(newBlog.title)
 })
 
+test('missing likes property defaults to zero', async () => {
+  const newBlog = {
+    title: 'A newly created third blog',
+    author: 'Pete Simmon',
+    url: 'http://www.blogportal.com'
+  }
+
+  await api.post('/api/blogs')
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const likes = blogsAtEnd.map(blog => blog.likes)
+  expect(likes[helper.initialBlogs.length]).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
