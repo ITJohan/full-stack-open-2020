@@ -95,7 +95,7 @@ test('a blog can be updated', async () => {
   await api
     .put(`/api/blogs/${blogToUpdate.id}`)
     .send({ ...blogToUpdate, likes: blogToUpdate.likes + 1 })
-    .expect(204)
+    .expect(200)
 
   const blogsAtEnd = await helper.blogsInDb()
 

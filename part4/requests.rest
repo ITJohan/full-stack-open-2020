@@ -1,3 +1,5 @@
+### POST a blog
+
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
@@ -8,6 +10,20 @@ Content-Type: application/json
   "likes": 109
 }
 
-###
+### GET all blogs
 
 GET http://localhost:3003/api/blogs
+
+### POST user
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "johnd",
+  "name": "John Doe",
+  "password": "johnrocks"
+}
+
+### GET all users
+GET http://localhost:3003/api/users
