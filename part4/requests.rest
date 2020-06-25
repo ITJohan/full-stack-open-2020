@@ -1,14 +1,6 @@
-### POST a blog
+### GET all users
 
-POST http://localhost:3003/api/blogs
-Content-Type: application/json
-
-{
-  "title": "Testing the refactored app",
-  "author": "Johan Lindkvist",
-  "url": "http://yes.com",
-  "likes": 109
-}
+GET http://localhost:3003/api/users
 
 ### GET all blogs
 
@@ -25,5 +17,17 @@ Content-Type: application/json
   "password": "johnrocks"
 }
 
-### GET all users
-GET http://localhost:3003/api/users
+### POST a blog
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Testing out the new functionality",
+  "author": "Jens P",
+  "url": "http://news.com",
+  "likes": 19
+}
+
+### DELETE a blog
+DELETE http://localhost:3003/api/blogs/5eeb25a185b3846c21960639
