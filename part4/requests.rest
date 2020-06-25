@@ -24,14 +24,15 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kIiwiaWQiOiI1ZWY0NTU0MGRhM2E4OTZmNTk2Zjc0NmUiLCJpYXQiOjE1OTMwNzQxODR9.gA3KfH1RfVV1b2nUltX6WGXLgxC_O6UN8Ny8nrVONNc
 
 {
-  "title": "This is awesome",
-  "author": "Lagertha",
-  "url": "http://earl.com",
-  "likes": 44
+  "title": "Beautiful indeed",
+  "author": "Charles XVI",
+  "url": "http://tomhanks.com",
+  "likes": 421
 }
 
 ### DELETE a blog
-DELETE http://localhost:3003/api/blogs/5ef4612d39799d0ec6e0d581
+DELETE http://localhost:3003/api/blogs/5ef4622536e8e90fe1b75400
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kIiwiaWQiOiI1ZWY0NTU0MGRhM2E4OTZmNTk2Zjc0NmUiLCJpYXQiOjE1OTMwNzQxODR9.gA3KfH1RfVV1b2nUltX6WGXLgxC_O6UN8Ny8nrVONNc
 
 ### Login user
 
