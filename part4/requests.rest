@@ -21,12 +21,13 @@ Content-Type: application/json
 
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kIiwiaWQiOiI1ZWY0NTU0MGRhM2E4OTZmNTk2Zjc0NmUiLCJpYXQiOjE1OTMwNzI4MjJ9.4ymrxydKLTNHXRuMXUHhC6NMAGteulmV4KVKLXHSQV0
 
 {
-  "title": "Testing out the new functionality",
-  "author": "Jens P",
-  "url": "http://news.com",
-  "likes": 19
+  "title": "Please work",
+  "author": "Ragnar",
+  "url": "http://lothbrok.com",
+  "likes": 11
 }
 
 ### DELETE a blog
