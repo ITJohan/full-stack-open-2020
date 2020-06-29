@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [notification, setNotification] = useState(null)
+  const [notificationColor, setNotificationColor] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -38,8 +41,17 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setNotificationColor('green')
+      setNotification(`Logged in`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
     } catch (exception) {
-      // TODO: Error message
+      setNotificationColor('red')
+      setNotification('Wrong credentials')
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
     }
   }
 
@@ -53,7 +65,7 @@ const App = () => {
     }
   }
 
-  const addBlog = e => {
+  const addBlog = async e => {
     e.preventDefault()
 
     const blog = {
@@ -62,13 +74,30 @@ const App = () => {
       url
     }
 
-    blogService.create(blog)
+    try {
+      await blogService.create(blog)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setNotificationColor('green')
+      setNotification('Blog added!')
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
+    } catch (exception) {
+      setNotificationColor('red')
+      setNotification('Error creating blog')
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
+    }
   }
 
   if (user === null) {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification msg={notification} color={notificationColor} />
         <form onSubmit={handleLogin}>
           <div>
             Username:
@@ -96,7 +125,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <h2>Blogs</h2>
+      <Notification msg={notification} color={notificationColor} />
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>Logout</button>
       <h2>Create new</h2>
