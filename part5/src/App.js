@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
@@ -68,6 +68,7 @@ const App = () => {
 
   const addBlog = async e => {
     e.preventDefault()
+    blogFormRef.current.toggleVisibility()
 
     const blog = {
       title,
@@ -96,9 +97,11 @@ const App = () => {
     }
   }
 
+  const blogFormRef = useRef()
+
   const blogForm = () => {
     return (
-      <Toggleable buttonLabel="New note">
+      <Toggleable buttonLabel="New note" ref={blogFormRef}>
         <h2>Create new</h2>
         <form onSubmit={addBlog}>
           <div>
