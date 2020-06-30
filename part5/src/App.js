@@ -84,6 +84,29 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
+  const addLike = async blog => {
+    try {
+      const updatedBlog = {
+        user: blog.user.id,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url,
+        likes: blog.likes + 1 
+      }
+      
+      const returnedBlog = await blogService.update(blog.id, updatedBlog)
+      const updatedBlogs = blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog)
+      setBlogs(updatedBlogs)
+      setNotificationColor('green')
+      setNotification('Added like')
+      setTimeout(() => setNotification(null), 3000)
+    } catch (exception) {
+      setNotificationColor('red')
+      setNotification('Failed to add like')
+      setTimeout(() => setNotification(null), 3000)
+    }
+  }
+
   const blogFormRef = useRef()
 
   const blogForm = () => {
@@ -134,7 +157,11 @@ const App = () => {
       </p>
       {blogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id} 
+          blog={blog} 
+          addLike={addLike}
+        />
       )}
     </div>
   )
