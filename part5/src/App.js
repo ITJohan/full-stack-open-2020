@@ -17,7 +17,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs(blogs)
-    })  
+    })
   }, [])
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const App = () => {
       setUser(user)
     }
   }, [])
-  
+
   const handleLogin = async e => {
     e.preventDefault()
     try {
@@ -42,7 +42,7 @@ const App = () => {
       setUsername('')
       setPassword('')
       setNotificationColor('green')
-      setNotification(`Logged in`)
+      setNotification('Logged in')
       setTimeout(() => {
         setNotification(null)
       }, 3000)
@@ -92,9 +92,9 @@ const App = () => {
         author: blog.author,
         title: blog.title,
         url: blog.url,
-        likes: blog.likes + 1 
+        likes: blog.likes + 1
       }
-      
+
       await blogService.update(blog.id, updatedBlog)
       const blogs = await blogService.getAll()
       setBlogs(blogs)
@@ -153,7 +153,7 @@ const App = () => {
               type="password"
               value={password}
               name="Password"
-              onChange={({ target }) => setPassword(target.value)} 
+              onChange={({ target }) => setPassword(target.value)}
             />
           </div>
           <button type="submit">Login</button>
@@ -173,8 +173,8 @@ const App = () => {
       {blogForm()}
       {blogs.map(blog =>
         <Blog
-          key={blog.id} 
-          blog={blog} 
+          key={blog.id}
+          blog={blog}
           addLike={() => addLike(blog)}
           removeHandler={user.id === blog.user.id ? () => removeBlog(blog) : null}
         />

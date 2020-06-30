@@ -15,7 +15,7 @@ const Notification = ({ msg, color }) => {
       </div>
     )
   }
-  
+
   return null
 }
 
