@@ -16,8 +16,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(sortedBlogs)
+      setBlogs(blogs)
     })  
   }, [])
 
@@ -25,6 +24,7 @@ const App = () => {
     let user = window.localStorage.getItem('blogUser')
     if (user) {
       user = JSON.parse(user)
+      blogService.setToken(user.token)
       setUser(user)
     }
   }, [])
@@ -95,16 +95,30 @@ const App = () => {
         likes: blog.likes + 1 
       }
       
-      const returnedBlog = await blogService.update(blog.id, updatedBlog)
-      const updatedBlogs = blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog)
-      setBlogs(updatedBlogs)
-      setNotificationColor('green')
-      setNotification('Added like')
-      setTimeout(() => setNotification(null), 3000)
+      await blogService.update(blog.id, updatedBlog)
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
     } catch (exception) {
       setNotificationColor('red')
       setNotification('Failed to add like')
       setTimeout(() => setNotification(null), 3000)
+    }
+  }
+
+  const removeBlog = async blog => {
+    console.log(blog)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+        setNotificationColor('green')
+        setNotification('Removed blog')
+        setTimeout(() => setNotification(null), 3000)
+      } catch (exception) {
+        setNotificationColor('red')
+        setNotification('Failed to remove blog')
+        setTimeout(() => setNotification(null), 3000)
+      }
     }
   }
 
@@ -162,6 +176,7 @@ const App = () => {
           key={blog.id} 
           blog={blog} 
           addLike={() => addLike(blog)}
+          removeHandler={user.id === blog.user.id ? () => removeBlog(blog) : null}
         />
       )}
     </div>

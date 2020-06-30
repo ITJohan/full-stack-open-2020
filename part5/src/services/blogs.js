@@ -9,7 +9,10 @@ const setToken = newToken => {
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.then(response => {
+    return response.data.sort((a, b) => b.likes - a.likes)
+  })
+
 }
 
 const create = async newObject => {
@@ -26,4 +29,13 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-export default { getAll, create, update, setToken }
+const remove = async id => {
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
+  return response.data
+}
+
+export default { getAll, create, update, remove, setToken }
