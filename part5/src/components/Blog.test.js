@@ -5,6 +5,8 @@ import Blog from './Blog'
 
 describe('<Blog />', () => {
   let component
+  let addLikeMock
+  let removeHandlerMock
 
   beforeEach(() => {
     const blog = {
@@ -18,8 +20,8 @@ describe('<Blog />', () => {
       likes: 100
     }
 
-    const addLikeMock = jest.fn()
-    const removeHandlerMock = jest.fn()
+    addLikeMock = jest.fn()
+    removeHandlerMock = jest.fn()
 
     component = render(
       <Blog blog={blog} addLike={addLikeMock} removeHandler={removeHandlerMock} />
@@ -38,5 +40,16 @@ describe('<Blog />', () => {
 
     expect(component.container).toHaveTextContent('URL: http://www.jd.com')
     expect(component.container).toHaveTextContent('Likes: 100')
+  })
+
+  test('if like button is clicked twice the event handler is called twice', () => {
+    const showButton = component.getByText('Show')
+    fireEvent.click(showButton)
+
+    const likeButton = component.getByText('Like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(addLikeMock.mock.calls).toHaveLength(2)
   })
 })
