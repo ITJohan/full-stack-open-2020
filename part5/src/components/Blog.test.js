@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
@@ -10,6 +10,10 @@ describe('<Blog />', () => {
     const blog = {
       title: 'Blogs title',
       author: 'John Doe',
+      user: {
+        username: 'jdoe',
+        name: 'Jane Doe',
+      },
       url: 'http://www.jd.com',
       likes: 100
     }
@@ -23,9 +27,16 @@ describe('<Blog />', () => {
   })
 
   test('renders blogs title and author but not url or number by default', () => {
-    component.debug()
     expect(component.container).toHaveTextContent('Blogs title John Doe')
-    expect(component.container).not.toHaveTextContent('http://www.jd.com')
-    expect(component.container).not.toHaveValue(100)
+    expect(component.container).not.toHaveTextContent('URL: http://www.jd.com')
+    expect(component.container).not.toHaveTextContent('Likes: 100')
+  })
+
+  test('renders blogs url and likes when show button is clicked', () => {
+    const showButton = component.getByText('Show')
+    fireEvent.click(showButton)
+
+    expect(component.container).toHaveTextContent('URL: http://www.jd.com')
+    expect(component.container).toHaveTextContent('Likes: 100')
   })
 })
