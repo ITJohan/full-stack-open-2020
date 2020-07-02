@@ -1,3 +1,16 @@
+Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
+  cy.request({
+    url: 'http://localhost:3003/api/blogs',
+    method: 'POST',
+    body: { title, author, url, likes},
+    headers: {
+      'Authorization': `Bearer ${JSON.parse(localStorage.getItem('blogUser')).token}`
+    }
+  })
+
+  cy.visit('http://localhost:3000')
+})
+
 describe('Blog app', function() {
   beforeEach(function() {
     // Reset db
@@ -55,25 +68,57 @@ describe('Blog app', function() {
       cy.contains('Blog title Hemmingway')
     })
 
-    describe('And one blog is created', function() {
+    describe('And several blogs is created', function() {
       beforeEach(function() {
-        cy.contains('New note').click()
-        cy.get('#title').type('Blog title')
-        cy.get('#author').type('Hemmingway')
-        cy.get('#url').type('http://blogs.com')
-        cy.get('#submit-button').click()
+        cy.createBlog({
+          title: 'Blog one',
+          author: 'Author one',
+          url: 'URL one',
+          likes: 0
+        })
+        cy.createBlog({
+          title: 'Blog two',
+          author: 'Author two',
+          url: 'URL two',
+          likes: 10
+        })
+        cy.createBlog({
+          title: 'Blog three',
+          author: 'Author three',
+          url: 'URL three',
+          likes: 20
+        })
       })
 
-      it('User can like the blog', function() {
+      it('User can like a blog', function() {
         cy.contains('Show').click()
         cy.contains('Like').click()
-        cy.contains('Likes: 1')
+        cy.contains('Likes: 21')
       })
 
       it('Creator user can remove the blog', function() {
         cy.contains('Show').click()
         cy.contains('Remove').click()
         cy.contains('Removed blog')
+      })
+
+      it('The blogs are ordered according to number of likes', function() {
+        cy.contains('Show').click()
+        cy.contains('Show').click()
+        cy.contains('Show').click()
+
+        cy.get('.blog').then(res => {
+          const firstString = res[0].children[1].children[1].innerText
+          const secondString = res[1].children[1].children[1].innerText
+          const thirdString = res[2].children[1].children[1].innerText
+
+          const firstLikes = Number(firstString.slice(7, firstString.length - 4))
+          const secondLikes = Number(secondString.slice(7, secondString.length - 4))
+          const thirdLikes = Number(thirdString.slice(7, thirdString.length - 4))
+
+          const arr = [firstLikes, secondLikes, thirdLikes]
+          expect(arr).to.have.ordered.members([20, 10, 0])
+        })
       })
     })
   })

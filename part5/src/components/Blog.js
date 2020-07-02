@@ -13,7 +13,7 @@ const Blog = ({ blog, addLike, removeHandler }) => {
   const [visible, setVisible] = useState(false)
 
   return (
-    <div style={style}>
+    <div className="blog" style={style}>
       {blog.title} {blog.author}
       <button onClick={() => setVisible(!visible)}>{visible ? 'Hide' : 'Show'}</button>
       {visible && (
