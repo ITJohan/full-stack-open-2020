@@ -35,7 +35,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.request('POST', 'http://localhost:3003/api/login/', {
         username: 'jdoe', password: 'pass123'
@@ -68,6 +68,12 @@ describe('Blog app', function() {
         cy.contains('Show').click()
         cy.contains('Like').click()
         cy.contains('Likes: 1')
+      })
+
+      it('Creator user can remove the blog', function() {
+        cy.contains('Show').click()
+        cy.contains('Remove').click()
+        cy.contains('Removed blog')
       })
     })
   })

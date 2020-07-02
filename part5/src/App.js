@@ -67,8 +67,9 @@ const App = () => {
 
   const addBlog = async blogObject => {
     try {
-      const blog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(blog))
+      await blogService.create(blogObject)
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
       setNotificationColor('green')
       setNotification('Blog added!')
       setTimeout(() => {
