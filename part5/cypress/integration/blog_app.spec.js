@@ -54,5 +54,21 @@ describe('Blog app', function() {
 
       cy.contains('Blog title Hemmingway')
     })
+
+    describe('And one blog is created', function() {
+      beforeEach(function() {
+        cy.contains('New note').click()
+        cy.get('#title').type('Blog title')
+        cy.get('#author').type('Hemmingway')
+        cy.get('#url').type('http://blogs.com')
+        cy.get('#submit-button').click()
+      })
+
+      it('User can like the blog', function() {
+        cy.contains('Show').click()
+        cy.contains('Like').click()
+        cy.contains('Likes: 1')
+      })
+    })
   })
 })
