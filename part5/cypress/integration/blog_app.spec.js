@@ -34,4 +34,25 @@ describe('Blog app', function() {
       cy.get('#notification').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe.only('When logged in', function() {
+    beforeEach(function() {
+      cy.request('POST', 'http://localhost:3003/api/login/', {
+        username: 'jdoe', password: 'pass123'
+      }).then(({ body }) => {
+        localStorage.setItem('blogUser', JSON.stringify(body))
+        cy.visit('http://localhost:3000')
+      })
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('New note').click()
+      cy.get('#title').type('Blog title')
+      cy.get('#author').type('Hemmingway')
+      cy.get('#url').type('http://blogs.com')
+      cy.get('#submit-button').click()
+
+      cy.contains('Blog title Hemmingway')
+    })
+  })
 })
