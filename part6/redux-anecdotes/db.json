@@ -34,6 +34,11 @@
       "content": "Testing",
       "votes": 0,
       "id": "DOhy8mc"
+    },
+    {
+      "content": "Testing the redux-thunk library",
+      "votes": 0,
+      "id": "ckLH4NL"
     }
   ]
 }
