@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 11
+      "votes": 12
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -44,6 +44,16 @@
       "content": "Improved notification",
       "votes": 1,
       "id": "XIJyUUR"
+    },
+    {
+      "content": "Using the old connect",
+      "votes": 2,
+      "id": "as4KuTE"
+    },
+    {
+      "content": "Connect in the form component",
+      "votes": 3,
+      "id": "EpIVEgJ"
     }
   ]
 }
