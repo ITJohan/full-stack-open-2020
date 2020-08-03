@@ -97,33 +97,29 @@ const CreateNew = (props) => {
     info.reset()
   }
 
+  const inputParams = field => {
+    return {
+      type: field.type,
+      value: field.value,
+      onChange: field.onChange
+    }
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input 
-            type={content.type}
-            value={content.value}
-            onChange={content.onChange}
-          />
+          <input {...inputParams(content)} />
         </div>
         <div>
           author
-          <input 
-            type={author.type}
-            value={author.value}
-            onChange={author.onChange}
-          />
+          <input {...inputParams(author)} />
         </div>
         <div>
           url for more info
-          <input 
-            type={info.type}
-            value={info.value}
-            onChange={info.onChange}
-          />
+          <input {...inputParams(info)} />
         </div>
         <button>create</button>
       </form>
