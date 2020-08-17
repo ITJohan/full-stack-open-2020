@@ -5,7 +5,12 @@ import Toggleable from './components/Toggleable'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import {initializeBlogs, createBlog} from './reducers/blogReducer'
+import {
+  initializeBlogs,
+  createBlog,
+  deleteBlog,
+  likeBlog
+} from './reducers/blogReducer'
 import {setNotification} from './reducers/notificationReducer'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -61,7 +66,10 @@ const App = () => {
       window.localStorage.removeItem('blogUser')
       setUser(null)
     } catch (expection) {
-      // TODO: Error message
+      dispatch(setNotification({
+        content: 'Failed to logout',
+        color: 'red'
+      }, 3))
     }
   }
 
@@ -84,17 +92,18 @@ const App = () => {
 
   const addLike = async blog => {
     try {
-      const updatedBlog = {
-        user: blog.user.id,
-        author: blog.author,
-        title: blog.title,
-        url: blog.url,
-        likes: blog.likes + 1
-      }
+      // const updatedBlog = {
+      //   user: blog.user.id,
+      //   author: blog.author,
+      //   title: blog.title,
+      //   url: blog.url,
+      //   likes: blog.likes + 1
+      // }
 
-      await blogService.update(blog.id, updatedBlog)
-      const blogs = await blogService.getAll()
-      dispatch(initializeBlogs(blogs))
+      // await blogService.update(blog.id, updatedBlog)
+      // const blogs = await blogService.getAll()
+      // dispatch(initializeBlogs(blogs))
+      dispatch(likeBlog(blog))
     } catch (exception) {
       dispatch(setNotification({
         content: 'Failed to add like',
@@ -104,11 +113,9 @@ const App = () => {
   }
 
   const removeBlog = async blog => {
-    console.log(blog)
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
-        await blogService.remove(blog.id)
-        initializeBlogs(initializeBlogs(blogs.filter(b => b.id !== blog.id)))
+        dispatch(deleteBlog(blog.id))
         dispatch(setNotification({
           content: 'Removed blog',
           color: 'green'

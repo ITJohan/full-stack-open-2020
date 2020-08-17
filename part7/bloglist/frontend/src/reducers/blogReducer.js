@@ -4,9 +4,14 @@ import blogService from '../services/blogs'
 const blogReducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT':
-      return action.data
+      return action.blogs
     case 'CREATE':
-      return [...state, action.data]
+      return [...state, action.newBlog]
+    case 'DELETE':
+      return state.filter(blog => blog.id !== action.id)
+    case 'LIKE':
+      const liked = action.data
+      return state.map(b => b.id === liked.id ? liked : b)
     default:
       return state
   }
@@ -14,10 +19,20 @@ const blogReducer = (state = [], action) => {
 
 export const createBlog = blog => {
   return async dispatch => {
-    const data = await blogService.create(blog)
+    const newBlog = await blogService.create(blog)
     dispatch({
       type: 'CREATE',
-      data
+      newBlog
+    })
+  }
+}
+
+export const deleteBlog = id => {
+  return async dispatch => {
+    await blogService.remove(id)
+    dispatch({
+      type: 'DELETE',
+      id
     })
   }
 }
@@ -27,7 +42,20 @@ export const initializeBlogs = () => {
     const blogs = await blogService.getAll()
     dispatch({
       type: 'INIT',
-      data: blogs
+      blogs
+    })
+  }
+}
+
+export const likeBlog = blog => {
+  return async dispatch => {
+    const updatedBlog = {...blog, likes: blog.likes + 1, user: blog.user.id}
+    const data = await blogService.update(updatedBlog)
+    const updatedData = {...data, user: blog.user}
+    
+    dispatch({
+      type: 'LIKE',
+      data: updatedData
     })
   }
 }
