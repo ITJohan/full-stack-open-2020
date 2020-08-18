@@ -42,7 +42,7 @@ const Blogs = () => {
 
   const blogForm = () => {
     return (
-      <Toggleable buttonLabel="New note" ref={blogFormRef}>
+      <Toggleable buttonLabel="Create new" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Toggleable>
     )

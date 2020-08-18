@@ -6,6 +6,7 @@ import {
   Switch
 } from 'react-router-dom'
 
+import Navigation from './components/Navigation'
 import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
@@ -53,19 +54,6 @@ const App = () => {
     }
   }
 
-  const handleLogout = async e => {
-    e.preventDefault()
-
-    try {
-      dispatch(logoutUser())
-    } catch (expection) {
-      dispatch(setNotification({
-        content: 'Failed to logout',
-        color: 'red'
-      }, 3))
-    }
-  }
-
   if (loggedInUser === null) {
     return (
       <div>
@@ -100,14 +88,11 @@ const App = () => {
 
   return (
     <Router>
-      <h2>Blogs</h2>
+      <Navigation />
       {notification &&
         <Notification notification={notification} />
       }
-      <div>
-        <p>{loggedInUser.name} logged in</p>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
+      <h2>Blog app</h2>
       <Switch>
         <Route path='/users/:id'>
           <User />
