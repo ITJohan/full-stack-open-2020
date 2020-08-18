@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link
+} from 'react-router-dom'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
@@ -26,9 +32,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [dispatch])
-
-  useEffect(() => {
     let user = window.localStorage.getItem('blogUser')
     if (user) {
       user = JSON.parse(user)
@@ -38,6 +41,7 @@ const App = () => {
 
   const handleLogin = async e => {
     e.preventDefault()
+
     try {
       const user = await loginService.login({
         username, password
@@ -62,6 +66,7 @@ const App = () => {
 
   const handleLogout = async e => {
     e.preventDefault()
+
     try {
       window.localStorage.removeItem('blogUser')
       dispatch(removeUser(null))
@@ -161,7 +166,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <h2>Blogs</h2>
       {notification &&
         <Notification notification={notification} />
@@ -170,16 +175,50 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>Logout</button>
       </p>
-      {blogForm()}
-      {blogs.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          addLike={() => addLike(blog)}
-          removeHandler={user.id === blog.user.id ? () => removeBlog(blog) : null}
-        />
-      )}
-    </div>
+      <Switch>
+        <Route path='/users'>
+          <h2>Users</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Blogs created</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(blogs.reduce((acc, curr) => {
+                const username = curr.user.username
+                if (acc.hasOwnProperty(username)) {
+                  acc[username]++
+                } else {
+                  acc[username] = 1
+                }
+
+                return acc
+              }, {})).map(([name, blogs]) => {
+                return (
+                  <tr key={name}>
+                    <td>{name}</td>
+                    <td>{blogs}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </Route>
+        <Route path='/'>
+          {blogForm()}
+          {blogs.map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              addLike={() => addLike(blog)}
+              removeHandler={user.id === blog.user.id ? () => removeBlog(blog) : null}
+            />
+          )}
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 
