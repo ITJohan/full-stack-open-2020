@@ -3,15 +3,16 @@ import {useDispatch, useSelector} from 'react-redux'
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Link
+  Switch
 } from 'react-router-dom'
+
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
 import BlogForm from './components/BlogForm'
-import blogService from './services/blogs'
-import loginService from './services/login'
+import Users from './components/Users'
+import User from './components/User'
+
 import {
   initializeBlogs,
   createBlog,
@@ -19,12 +20,13 @@ import {
   likeBlog
 } from './reducers/blogReducer'
 import {setNotification} from './reducers/notificationReducer'
-import {setUser, removeUser} from './reducers/userReducer'
+import {loginUser, logoutUser, initializeUser} from './reducers/loginReducer'
+import {initializeUsers} from './reducers/userReducer'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs.sort((a, b) => b.likes - a.likes))
   const notification = useSelector(state => state.notification)
-  const user = useSelector(state => state.user)
+  const loggedInUser = useSelector(state => state.login)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -32,30 +34,22 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
-    let user = window.localStorage.getItem('blogUser')
-    if (user) {
-      user = JSON.parse(user)
-      dispatch(setUser(user))
-    }
+    dispatch(initializeUser())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   const handleLogin = async e => {
     e.preventDefault()
 
     try {
-      const user = await loginService.login({
-        username, password
-      })
-
-      window.localStorage.setItem('blogUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUsername('')
-      setPassword('')
-      dispatch(setUser(user))
+      dispatch(loginUser(username, password))
       dispatch(setNotification({
         content: 'Logged in',
         color: 'green'
       }, 3))
+
+      setUsername('')
+      setPassword('')
     } catch (exception) {
       dispatch(setNotification({
         content: 'Wrong credentials',
@@ -68,8 +62,7 @@ const App = () => {
     e.preventDefault()
 
     try {
-      window.localStorage.removeItem('blogUser')
-      dispatch(removeUser(null))
+      dispatch(logoutUser())
     } catch (expection) {
       dispatch(setNotification({
         content: 'Failed to logout',
@@ -133,7 +126,7 @@ const App = () => {
     )
   }
 
-  if (user === null) {
+  if (loggedInUser === null) {
     return (
       <div>
         <h2>Log in to application</h2>
@@ -172,39 +165,15 @@ const App = () => {
         <Notification notification={notification} />
       }
       <p>
-        {user.name} logged in
+        {loggedInUser.name} logged in
         <button onClick={handleLogout}>Logout</button>
       </p>
       <Switch>
+        <Route path='/users/:id'>
+          <User />
+        </Route>
         <Route path='/users'>
-          <h2>Users</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Blogs created</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(blogs.reduce((acc, curr) => {
-                const username = curr.user.username
-                if (acc.hasOwnProperty(username)) {
-                  acc[username]++
-                } else {
-                  acc[username] = 1
-                }
-
-                return acc
-              }, {})).map(([name, blogs]) => {
-                return (
-                  <tr key={name}>
-                    <td>{name}</td>
-                    <td>{blogs}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <Users blogs={blogs} />
         </Route>
         <Route path='/'>
           {blogForm()}
@@ -213,7 +182,7 @@ const App = () => {
               key={blog.id}
               blog={blog}
               addLike={() => addLike(blog)}
-              removeHandler={user.id === blog.user.id ? () => removeBlog(blog) : null}
+              removeHandler={loggedInUser.id === blog.user.id ? () => removeBlog(blog) : null}
             />
           )}
         </Route>

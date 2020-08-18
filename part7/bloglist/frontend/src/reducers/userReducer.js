@@ -1,33 +1,21 @@
-import blogService from '../services/blogs'
+import userService from '../services/users'
 
-const userReducer = (state = null, action) => {
+const userReducer = (state = [], action) => {
   switch (action.type) {
-    case 'SET':
+    case 'INIT_USERS':
       return action.data
-    case 'REMOVE':
-      return null
     default:
       return state
   }
 }
 
-export const setUser = user => {
+export const initializeUsers = () => {
   return async dispatch => {
-    await blogService.setToken(user.token)
+    const data = await userService.getAll()
 
     dispatch({
-      type: 'SET',
-      data: user
-    })
-  }
-}
-
-export const removeUser = () => {
-  return async dispatch => {
-    await blogService.setToken('')
-
-    dispatch({
-      type: 'REMOVE'
+      type: 'INIT_USERS',
+      data
     })
   }
 }

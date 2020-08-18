@@ -3,13 +3,13 @@ import blogService from '../services/blogs'
 /* eslint-disable indent */
 const blogReducer = (state = [], action) => {
   switch (action.type) {
-    case 'INIT':
+    case 'INIT_BLOGS':
       return action.blogs
-    case 'CREATE':
+    case 'CREATE_BLOG':
       return [...state, action.newBlog]
-    case 'DELETE':
+    case 'DELETE_BLOG':
       return state.filter(blog => blog.id !== action.id)
-    case 'LIKE':
+    case 'LIKE_BLOG':
       const liked = action.data
       return state.map(b => b.id === liked.id ? liked : b)
     default:
@@ -21,7 +21,7 @@ export const createBlog = blog => {
   return async dispatch => {
     const newBlog = await blogService.create(blog)
     dispatch({
-      type: 'CREATE',
+      type: 'CREATE_BLOG',
       newBlog
     })
   }
@@ -31,7 +31,7 @@ export const deleteBlog = id => {
   return async dispatch => {
     await blogService.remove(id)
     dispatch({
-      type: 'DELETE',
+      type: 'DELETE_BLOG',
       id
     })
   }
@@ -41,7 +41,7 @@ export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
     dispatch({
-      type: 'INIT',
+      type: 'INIT_BLOGS',
       blogs
     })
   }
