@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
@@ -12,14 +13,14 @@ import {
   likeBlog
 } from './reducers/blogReducer'
 import {setNotification} from './reducers/notificationReducer'
-import {useDispatch, useSelector} from 'react-redux'
+import {setUser, removeUser} from './reducers/userReducer'
 
 const App = () => {
-  const blogs = useSelector(state => state.blogs)
+  const blogs = useSelector(state => state.blogs.sort((a, b) => b.likes - a.likes))
   const notification = useSelector(state => state.notification)
+  const user = useSelector(state => state.user)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
 
@@ -31,10 +32,9 @@ const App = () => {
     let user = window.localStorage.getItem('blogUser')
     if (user) {
       user = JSON.parse(user)
-      blogService.setToken(user.token)
-      setUser(user)
+      dispatch(setUser(user))
     }
-  }, [])
+  }, [dispatch])
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -45,9 +45,9 @@ const App = () => {
 
       window.localStorage.setItem('blogUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
       setUsername('')
       setPassword('')
+      dispatch(setUser(user))
       dispatch(setNotification({
         content: 'Logged in',
         color: 'green'
@@ -64,7 +64,7 @@ const App = () => {
     e.preventDefault()
     try {
       window.localStorage.removeItem('blogUser')
-      setUser(null)
+      dispatch(removeUser(null))
     } catch (expection) {
       dispatch(setNotification({
         content: 'Failed to logout',
@@ -92,17 +92,6 @@ const App = () => {
 
   const addLike = async blog => {
     try {
-      // const updatedBlog = {
-      //   user: blog.user.id,
-      //   author: blog.author,
-      //   title: blog.title,
-      //   url: blog.url,
-      //   likes: blog.likes + 1
-      // }
-
-      // await blogService.update(blog.id, updatedBlog)
-      // const blogs = await blogService.getAll()
-      // dispatch(initializeBlogs(blogs))
       dispatch(likeBlog(blog))
     } catch (exception) {
       dispatch(setNotification({
