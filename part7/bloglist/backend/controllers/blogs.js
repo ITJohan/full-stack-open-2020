@@ -27,6 +27,7 @@ blogsRouter.post('/', async (request, response) => {
   }
 
   blog.user = user
+  blog.comments = []
 
   const savedBlog = await blog.save()
 
@@ -56,6 +57,19 @@ blogsRouter.delete('/:id', async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const blog = request.body
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  response.status(200).json(updatedBlog)
+})
+
+blogsRouter.get('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  response.json(blog.comments)
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const comment = request.body
+  const blog = await Blog.findById(request.params.id)
+  blog.comments.push(comment.content)
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true}) 
   response.status(200).json(updatedBlog)
 })
 

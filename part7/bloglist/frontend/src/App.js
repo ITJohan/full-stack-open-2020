@@ -17,7 +17,7 @@ import {
   initializeBlogs
 } from './reducers/blogReducer'
 import {setNotification} from './reducers/notificationReducer'
-import {loginUser, logoutUser, initializeUser} from './reducers/loginReducer'
+import {loginUser, initializeUser} from './reducers/loginReducer'
 import {initializeUsers} from './reducers/userReducer'
 
 const App = () => {

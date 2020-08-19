@@ -43,3 +43,14 @@ Content-Type: application/json
   "username": "johnd",
   "password": "johnrocks"
 }
+
+### Get comments
+GET http://localhost:3003/api/blogs/5f3b84eefbc3af3e39e089b6/comments
+
+### POST comment
+POST http://localhost:3003/api/blogs/5f3b84eefbc3af3e39e089b6/comments
+Content-Type: application/json
+
+{
+  "content": "Will concat work?"
+}
