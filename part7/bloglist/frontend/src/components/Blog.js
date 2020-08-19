@@ -5,6 +5,8 @@ import {useParams, useHistory} from 'react-router-dom'
 import {likeBlog, deleteBlog} from '../reducers/blogReducer'
 import {setNotification} from '../reducers/notificationReducer'
 
+import Comments from './Comments'
+
 const Blog = () => {
   const {id} = useParams()
   const history = useHistory()
@@ -60,16 +62,7 @@ const Blog = () => {
         {loggedInUser.id === blog.user.id &&
           <button onClick={removeBlog}>Remove</button>
         }
-      </div>
-      <div>
-        <h3>Comments</h3>
-        <ul>
-          {blog.comments.map(comment => (
-            <li key={comment}>
-              {comment}
-            </li>
-          ))}
-        </ul>
+        <Comments blog={blog} />
       </div>
     </div>
   )

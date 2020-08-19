@@ -1,4 +1,5 @@
 import blogService from '../services/blogs'
+import blogs from '../services/blogs'
 
 /* eslint-disable indent */
 const blogReducer = (state = [], action) => {
@@ -11,6 +12,8 @@ const blogReducer = (state = [], action) => {
       return state.filter(blog => blog.id !== action.id)
     case 'LIKE_BLOG':
       return state.map(b => b.id === action.data.id ? action.data : b)
+    case 'COMMENT_BLOG':
+      return state.map(blog => blog.id === action.data.id ? action.data : blog)
     default:
       return state
   }
@@ -55,6 +58,17 @@ export const likeBlog = blog => {
     dispatch({
       type: 'LIKE_BLOG',
       data: updatedData
+    })
+  }
+}
+
+export const addComment = (blog, comment) => {
+  return async dispatch => {
+    const returnedBlog = await blogService.comment(blog.id, comment)
+
+    dispatch({
+      type: 'COMMENT_BLOG',
+      data: returnedBlog
     })
   }
 }
