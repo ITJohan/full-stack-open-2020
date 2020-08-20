@@ -6,17 +6,32 @@ import {logoutUser} from '../reducers/loginReducer'
 import {setNotification} from '../reducers/notificationReducer'
 
 const Navigation = () => {
-  const ulStyle = {
-    backgroundColor: 'lightgrey',
-    display: 'flex',
-    flexDirection: 'row',
-    listStyleType: 'none',
-    padding: '0'
-  }
-
-  const liStyle = {
-    textAlign: 'center',
-    margin: '5px'
+  const style = {
+    logo: {
+      fontSize: '36px',
+      flexGrow: 1
+    },
+    ul: {
+      backgroundColor: 'grey',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      listStyleType: 'none',
+      padding: '0'
+    },
+    li: {
+      textAlign: 'center',
+      margin: '5px',
+    },
+    button: {
+      marginLeft: '10px'
+    },
+    a: {
+      textDecoration: 'none',
+      color: 'white'
+    }
   }
 
   const loggedInUser = useSelector(state => state.login)
@@ -37,20 +52,23 @@ const Navigation = () => {
 
   return (
     <nav>
-      <ul style={ulStyle}>
-        <li style={liStyle}>
-          <Link to='/blogs'>
+      <ul style={style.ul}>
+        <li style={{...style.logo, ...style.li}}>
+          Blog app
+        </li>
+        <li style={style.li}>
+          <Link style={style.a} to='/blogs'>
             blogs
           </Link>
         </li>
-        <li style={liStyle}>
-          <Link to='/users'>
+        <li style={style.li}>
+          <Link style={style.a} to='/users'>
             users
           </Link>
         </li>
-        <li style={liStyle}>
+        <li style={style.li}>
           {loggedInUser.name} logged in
-          <button onClick={handleLogout}>Logout</button>
+          <button style={style.button} onClick={handleLogout}>Logout</button>
         </li>
       </ul>
     </nav>

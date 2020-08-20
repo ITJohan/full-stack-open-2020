@@ -21,6 +21,13 @@ import {loginUser, initializeUser} from './reducers/loginReducer'
 import {initializeUsers} from './reducers/userReducer'
 
 const App = () => {
+  const style = {
+    margin: '0 10%',
+    padding: '0',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+
   const notification = useSelector(state => state.notification)
   const loggedInUser = useSelector(state => state.login)
   const [username, setUsername] = useState('')
@@ -56,7 +63,7 @@ const App = () => {
 
   if (loggedInUser === null) {
     return (
-      <div>
+      <div style={style}>
         <h2>Log in to application</h2>
         {notification &&
           <Notification notification={notification} />
@@ -87,27 +94,28 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <Navigation />
-      {notification &&
-        <Notification notification={notification} />
-      }
-      <h2>Blog app</h2>
-      <Switch>
-        <Route path='/users/:id'>
-          <User />
-        </Route>
-        <Route path='/users'>
-          <Users />
-        </Route>
-        <Route path='/blogs/:id'>
-          <Blog />
-        </Route>
-        <Route path='/'>
-          <Blogs />
-        </Route>
-      </Switch>
-    </Router>
+    <div style={style}>
+      <Router>
+        <Navigation />
+        {notification &&
+          <Notification notification={notification} />
+        }
+        <Switch>
+          <Route path='/users/:id'>
+            <User />
+          </Route>
+          <Route path='/users'>
+            <Users />
+          </Route>
+          <Route path='/blogs/:id'>
+            <Blog />
+          </Route>
+          <Route path='/'>
+            <Blogs />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   )
 }
 
