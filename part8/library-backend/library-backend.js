@@ -75,7 +75,14 @@ const resolvers = {
           name: args.author,
           born: null
         })
-        await author.save()
+        
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          })
+        }
       }
 
       let book = {
