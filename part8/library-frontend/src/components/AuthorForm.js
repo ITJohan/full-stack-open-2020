@@ -13,7 +13,7 @@ const AuthorForm = ({authors}) => {
   const submit = e => {
     e.preventDefault()
 
-    changeAuthor({variables: {name, born}})
+    changeAuthor({variables: {name, born: Number(born)}})
 
     setName('')
     setBorn('')
