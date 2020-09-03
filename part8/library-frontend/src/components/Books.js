@@ -1,17 +1,24 @@
 import React, {useState, useEffect} from 'react'
+import {useQuery} from '@apollo/client'
+import {ALL_BOOKS} from '../queries'
 import BookFilter from './BookFilter'
 
-const Books = ({show, books}) => {
+const Books = (props) => {
+  const result = useQuery(ALL_BOOKS)
   const [filter, setFilter] = useState('')
-  const [filteredBooks, setFilteredBooks] = useState(books)
+  const [filteredBooks, setFilteredBooks] = useState([])
 
   useEffect(() => {
+    if (result.loading) {
+      return
+    }
+
     if (filter === '') {
-      setFilteredBooks(books)
+      setFilteredBooks(result.data.allBooks)
     } else {
       const tempBooks = []
 
-      books.forEach(book => {
+      result.data.allBooks.forEach(book => {
         if (book.genres.includes(filter)) {
           tempBooks.push(book)
         }
@@ -19,10 +26,14 @@ const Books = ({show, books}) => {
 
       setFilteredBooks(tempBooks)
     }
-  }, [filter, books])
+  }, [result, filter])
 
-  if (!show) {
+  if (!props.show) {
     return null
+  }
+
+  if (result.loading) {
+    return <div>loading...</div>
   }
 
   return (
@@ -49,7 +60,7 @@ const Books = ({show, books}) => {
           )}
         </tbody>
       </table>
-      <BookFilter books={books} setFilter={setFilter} />
+      <BookFilter books={result.data.allBooks} setFilter={setFilter} />
 </div>
   )
 }

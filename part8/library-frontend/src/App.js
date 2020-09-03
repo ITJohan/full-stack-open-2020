@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {useApolloClient, useQuery} from '@apollo/client'
-import {ALL_BOOKS} from './queries'
+import {useApolloClient} from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
@@ -11,7 +10,6 @@ const App = () => {
   const [token, setToken] = useState(null)
   const [page, setPage] = useState('authors')
   const client = useApolloClient()
-  const result = useQuery(ALL_BOOKS)
 
   useEffect(() => {
     const cachedToken = localStorage.getItem('library-user-token')
@@ -26,12 +24,6 @@ const App = () => {
     client.resetStore() 
     setPage('authors')
   }
-
-  if (result.loading) {
-    return <div>loading...</div>
-  }
-
-  const books = result.data.allBooks
 
   return (
     <div>
@@ -54,7 +46,6 @@ const App = () => {
 
       <Books
         show={page === 'books'}
-        books={books}
       />
 
       <NewBook
@@ -63,7 +54,6 @@ const App = () => {
 
       <Recommended
         show={page ==='recommended'}
-        books={books}
       />
 
       <LoginForm
