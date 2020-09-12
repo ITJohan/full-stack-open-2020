@@ -25,7 +25,7 @@ const typeDefs = gql`
   type Author {
     name: String!
     born: Int
-    bookCount: Int!
+    bookCount: Int
     id: ID!
   }
 
@@ -82,12 +82,6 @@ const typeDefs = gql`
 `
 
 const resolvers = {
-  Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({author: {$in: [root]}})
-      return books.length
-    }
-  },
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
@@ -107,19 +101,23 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      const currentUser = context.currentUser
+        const currentUser = context.currentUser
 
-      if (!currentUser) {
-        throw new AuthenticationError('not authenticated')
-      }
+        if (!currentUser) {
+          throw new AuthenticationError('not authenticated')
+        }
 
-      let author = await Author.findOne({name: args.author})
-      if (!author) {
-        author = new Author({
-          name: args.author,
-          born: null
-        })
-        
+        let author = await Author.findOne({name: args.author})
+        if (!author) {
+          author = new Author({
+            name: args.author,
+            born: null,
+            bookCount: 1
+          })
+        } else {
+          author.bookCount = author.bookCount + 1
+        }
+
         try {
           await author.save()
         } catch (error) {
@@ -127,26 +125,25 @@ const resolvers = {
             invalidArgs: args
           })
         }
-      }
 
-      let book = {
-        ...args,
-        author
-      }
+        let book = {
+          ...args,
+          author
+        }
 
-      book = new Book(book)
+        book = new Book(book)
 
-      try {
-        await book.save()
-      } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args
-        })
-      }
+        try {
+          await book.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          })
+        }
 
-      pubsub.publish('BOOK_ADDED', {bookAdded: book})
+        pubsub.publish('BOOK_ADDED', {bookAdded: book})
 
-      return book
+        return book
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
