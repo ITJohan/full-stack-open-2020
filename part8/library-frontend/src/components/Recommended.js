@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {useLazyQuery} from '@apollo/client'
 import {GET_USER, GET_BOOKS_BY_GENRE} from '../queries'
 
@@ -16,7 +16,7 @@ const Recommended = ({show}) => {
     } else if (!booksResult.data && userResult.data) {
       getBooks({variables: {genre: userResult.data.me.favoriteGenre}})
     }
-  }, [show, userResult])
+  }, [show, userResult]) // eslint-disable-line
 
   if (!show) {
     return null

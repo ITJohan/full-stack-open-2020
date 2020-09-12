@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import {useApolloClient} from '@apollo/client'
+import {useApolloClient, useQuery, useMutation, useSubscription} from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Recommended from './components/Recommended'
 import LoginForm from './components/LoginForm'
+import {BOOK_ADDED} from './queries'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -17,6 +18,12 @@ const App = () => {
       setToken(cachedToken)
     }
   }, [token])
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({subscriptionData}) => {
+      console.log(subscriptionData)
+    }
+  })
   
   const logout = () => {
     setToken(null)
