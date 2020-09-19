@@ -6,12 +6,12 @@ interface Report {
   ratingDescription: string,
   target: number,
   average: number
-};
+}
 
 interface ExerciseArguments {
   target: number,
   hours: Array<number>
-};
+}
 
 const parseExerciseArguments = (args: Array<string>): ExerciseArguments => {
   const filteredArgs = 
@@ -50,5 +50,5 @@ try {
   const {target, hours} = parseExerciseArguments(process.argv);
   console.log(calculateExercises(target, hours));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
+  console.log('Error, something bad happened, message: ', e.message); // eslint-disable-line
 }

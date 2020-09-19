@@ -1,7 +1,7 @@
 interface BmiArguments {
   height: number,
   weight: number
-};
+}
 
 const parseBmiArguments = (args: Array<string>): BmiArguments => {
   if (args.length < 4) throw new Error('Not enough arguments');
@@ -30,12 +30,12 @@ export const calculateBmi = (height: number, weight: number): string => {
   else if (bmi < 40) msg = 'Obese Class II (Severely obese)';
   else msg = 'Obese Class III (Very severely obese)';
 
-  return msg
-}
+  return msg;
+};
 
 try {
   const {height, weight} = parseBmiArguments(process.argv);
   console.log(calculateBmi(height, weight));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
+  console.log('Error, something bad happened, message: ', e.message); // eslint-disable-line
 }
