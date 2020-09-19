@@ -30,7 +30,7 @@ const parseExerciseArguments = (args: Array<string>): ExerciseArguments => {
   };
 };
 
-const calculateExercises = (target: number, hours: Array<number>): Report => {
+export const calculateExercises = (target: number, hours: Array<number>): Report => {
   const sum = 
     hours.reduce((sum, current) => sum += current);
   const average = sum / hours.length;
