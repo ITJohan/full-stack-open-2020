@@ -1,6 +1,6 @@
 import {PatientEntry} from '../src/types';
 
-const patientEntries: Array<PatientEntry> = [
+const patients: Array<PatientEntry> = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
@@ -43,4 +43,4 @@ const patientEntries: Array<PatientEntry> = [
     }
 ];
 
-export default patientEntries;
+export default patients;
