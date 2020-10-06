@@ -1,10 +1,10 @@
 import diagnoses from '../../data/diagnoses';
-import {DiagnoseEntry} from '../types'; 
+import {Diagnosis} from '../types'; 
 
-const getEntries = (): Array<DiagnoseEntry> => {
+const getEntries = (): Array<Diagnosis> => {
   return diagnoses;
 };
 
 export default {
-  getEntries
+  getEntries,
 };
