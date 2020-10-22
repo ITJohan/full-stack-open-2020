@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from "../constants";
 import { Patient, Entry } from "../types";
 import { useStateValue, setPatient } from "../state";
+import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
+import { Button } from 'semantic-ui-react';
+import AddEntryModal from '../AddEntryModal';
 
 const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
   const style = {
@@ -45,6 +48,8 @@ const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
 const PatientPage: React.FC = () => {
   const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams< {id: string} >();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -70,6 +75,27 @@ const PatientPage: React.FC = () => {
     return null;
   }
 
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: updatedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch({ type: "SET_PATIENT", payload: updatedPatient });
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
+
   return (
     <div>
       <h2>{patients[id].name}</h2>
@@ -79,6 +105,13 @@ const PatientPage: React.FC = () => {
       {patients[id].entries.map(entry => (
         <EntryDetails key={entry.id} entry={entry} />
       ))}
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>Add New Entry</Button>
     </div>
   )
 }
